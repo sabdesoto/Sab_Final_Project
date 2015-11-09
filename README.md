@@ -3,9 +3,11 @@ Project created by Sabrina DeSoto 10-27-2015.
 Computation in the Physical Science
 
 PROJECT SEARCH FOR SPACE TREASURE
+
 10 MINUTE PLAN
 
 INTRODUCTION
+
 The purpose of this project is to create a code that can analyze any
 microwave amplification by stimulated emission of radiation (MASER) data and 
 return coordinates in the sky for where the MASER is located. This work can 
@@ -38,6 +40,7 @@ Finally once a detection is confirmed in a phase, steps towards establishing a
 set of coordinates for the MASER can start. (Physics steps…). 
 
 METHOD
+
 The script begins with creating an imports library containing all necessary 
 coding aides. Data is then imported using the open command and a loop to print
 it line by line. Next another loop is run to resample the data, separating out
@@ -65,6 +68,7 @@ out by comas inside double squared brackets [[_]]. (add stats and physics part/
 include completed flow chart)
 
 KEY VARIABLES AND FUNCTIONS
+
 pd = pandas library
 plt = matplotlib.pyplot library (for plotting)
 re = re library (for regular expressions)
