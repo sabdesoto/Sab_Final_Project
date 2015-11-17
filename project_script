@@ -1,0 +1,42 @@
+#11/16/2015 Sabrina Desoto
+#Computational Physics Final Project Script 1
+
+#Import Libraries
+
+import pandas as pd
+import matplotlib.pyplot as plt
+%matplotlib inline
+import csv
+import re
+
+
+#Define main function that will...
+
+def main():
+	#Step1. Define variables
+	
+	#length of data collected directly from antena array
+	length_of_file = 12624
+	#empty list, called table, holds each chunk of data separated by observation time
+	table = []
+	
+	#Step2. load data separating each chunk of observation time
+	load_data(filepath)
+	
+	#Step3. plot phase diagrams for each chunk of observation time
+	make_phase_diagrams(table)
+	
+	#Step4. get signal amplitudes from data
+	signal_amplitude(data, column) 
+	
+	#Step5. get average signal phase and phase location 
+	signal_phase(table)
+	
+	#Step6. assign variable to output of signal_phase function
+	phase_results = signal_phase(table)
+	
+	#GET FRINGE PLOTS
+	
+#Define functions in main function
+
+	
