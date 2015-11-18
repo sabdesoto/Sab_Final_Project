@@ -77,6 +77,8 @@ def load_data(antena_data_path):
 		header_row += 523
 		#count each time list is ran through
 		observation_periods+=1
+	
+	assert observation_periods == 24, 'Loop should run 24 times, for 12hrs of observation time, divided into 30minute observation periods'
 		
 	#checks how many times the while list ran and data chunks separated 
 	print(observation_periods)
@@ -119,6 +121,7 @@ def make_phase_diagrams(table):
 		plt.savefig(prefix + str(count) +'_Phase_Diagrams.pdf')
 		plt.close()
 
+	assert count == 24, 'Loop should run 24 times, for 12hrs of observation time, divided into 30minute observation periods'
 
 def signal_amplitude(data, column):
 	'''Function that reads through amplitudes and returns amplitudes > constant threshold Input:dataframe, datafram.column output:list of amplitudes > threshold'''
@@ -142,7 +145,10 @@ def signal_phase(table):
 	SD =[]
 	#ASP stores average signal phase (ASP)  
 	ASP =[]
+	#add count variable to test function accuracy
+	counts=0
     
+	   
 	for chunk in table:
     
 		#STEP 4)
@@ -170,7 +176,10 @@ def signal_phase(table):
 		#add phase location column to dataframe
 		ave_sig_phase['Phase_location']=ave_sig_phase/360
 
-	ave_sig_phase.to_csv(prefix2, sep=',')
+		counts+=1
+	assert counts == 24, 'Loop should run 24 times, for 12hrs of observation time, divided into 30minute observation periods'
+	
+	ave_sig_phase.to_csv(prefix2 + '.csv', sep=',')
     #STEP 8)
 	#return completed table of average signal phases defined as new variable
 	return(ave_sig_phase.head())
