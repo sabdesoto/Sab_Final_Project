@@ -1,4 +1,5 @@
-Project: Fringe Rate Mapping of a 1720 MHz MASER
+					Project: Fringe Rate Mapping of a 1720 MHz MASER
+
 Project created by Sabrina DeSoto 10-27-2015.
 
 										INTRODUCTION
@@ -6,9 +7,13 @@ The purpose of this project is to use fringe rate mapping via a python code to a
 
 										RUN SCRIPT
 Once the main project directory (Sab_Final_Project) and all it’s subdirectories are downloaded the project can be ran from inside this main directory. To run the project for the sample data provided open a terminal, move into the main project directory and enter:
+			
 			./run_script.sh Data/antena.dat project_final_product.csv
+
 Both the ‘Data/antenna.dat’ and ‘of_project’ are arguments so they may be changed to run the python script for other data sets. The first argument must be a path to the input data file and the second argument is any name that will be assigned to the most important out come of the project, a dataframe of average phase and this phase converted to a location on a fringe. In general the python can script can be run by:
+			
 			./run_script.sh path_to_input_data output_name.file_type
+
 However the loading function of this project is specific to raw antena data for 24 observation periods, that are separated by headers. To run this program for data not formatted this way the load_data function in the python script itself would need to be changed (most importantly the length_of_file=12624). 
 Running the python script for the file types it was intended for (with the first command above)produces the following outcomes from each function:
  	load_data(): the outcomes from this function are chunks of antenna data sorted by observation period saved in Data/Analyzed_data as . obv_period#_data.csv files
@@ -25,24 +30,24 @@ The third function defined as signal_amplitude() is not called on it’s own. Th
 
 					KEY VARIABLES AND FUNCTIONS IN PYTHON SCRIPT
 Libraries:
-pd = pandas library
-plt = matplotlib.pyplot library (for plotting)
-sys = sys library
-Arguments:
-input_data_file = sys.argv[1]
-output_name = sys.argv[2]
+	pd = pandas library (0.17.0 version)
+	plt = matplotlib.pyplot library (for plotting)
+	sys = sys library
+	Arguments:
+	input_data_file = sys.argv[1]
+	output_name = sys.argv[2]
 
 Variables:
-length_of_file=12624
-table=[]
-signal_ampl_list=[]
-threshold_ampl=0.010
+	length_of_file=12624
+	table=[]
+	signal_ampl_list=[]
+	threshold_ampl=0.010
 
 
 Functions, inputs and outputs:
-load_data(input_data_file) = separated data chunks 
-make_phase_diagrams(table) = phase diagrams
-signal_phase(table) = phase average and phase location data frame
+	load_data(input_data_file) = separated data chunks 
+	make_phase_diagrams(table) = phase diagrams
+	signal_phase(table) = phase average and phase location data frame
 
 
 
