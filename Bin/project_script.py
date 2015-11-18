@@ -4,49 +4,44 @@
 
 #Define main function that will...
 
-#Set up. Import Libraries
+#Step0. Set up. Import Libraries
 import pandas as pd 
 import matplotlib.pyplot as plt
 import sys
 	
-#Step0. Define arguments 
-#enter input path to antena_data for furst function
-antena_data_path= sys.argv[1]
-#prefix to save all separated antena_data files
-prefix0= sys.argv[2]
-#prefix for saving all phase diagrams
-prefix= sys.argv[3]
-#prefix for saving average signal phase data for all observation periods
-prefix2= sys.argv[4]
+#Step1. Define arguments 
+#enter filename for antena_data for first function
+input_data_file = sys.argv[1]
 
-#Step1. Define variables	
+#prefix to save all separated antena_data files
+#data_chunk_name= sys.argv[2]
+#prefix for saving all phase diagrams
+#prefix= sys.argv[3]
+
+#output_name for saving average signal phase data for all observation periods
+output_name = sys.argv[2]
+
+#Step2. Define variables	
 #length of data collected directly from antena array
 length_of_file = 12624
 #empty list, called table, holds each chunk of data separated by observation time
 table = []
+#empty list to hold signal amplitudes
 signal_ampl_list= []
 
 def main():
 	
-	#Step2. load data separating each chunk of observation time
-	load_data(antena_data_path)
+	#Step3. load data separating each chunk of observation time
+	load_data(input_data_file)
 	
-	#Step3. plot phase diagrams for each chunk of observation time
-	make_phase_diagrams(table)
-	
-	#Step4. get signal amplitudes from data
-	#signal_amplitude(data, column) 
+	#Step4. plot phase diagrams for each chunk of observation time
+	make_phase_diagrams(table) 
 	
 	#Step5. get average signal phase and phase location 
 	signal_phase(table)
 	
-	#Step6. assign variable to output of signal_phase function
-	#phase_results = signal_phase(table)
-	
-	#GET FRINGE PLOTS
-	
 #Define functions in main function
-def load_data(antena_data_path):
+def load_data(input_data_file):
 	'''load_data function loads the data by separating each chunk of data for a different observation time into a list called table. Input: file path to project data from antena array. Output: number of times loop ran, aka the number of observation periods'''
 	
 	#1. assign variables
@@ -64,7 +59,7 @@ def load_data(antena_data_path):
 		#shift the skipped footer down the length of the data
 		skipped_footer -= 526
 		#dataframe is the dataframe that contains the separated data
-		dataframe = pd.read_table(antena_data_path, sep='\s+', header=header_row, skipfooter=skipped_footer, engine='python')
+		dataframe = pd.read_table(input_data_file , sep='\s+', header=header_row, skipfooter=skipped_footer, engine='python')
 		#appends the dataframe to the list
 		table.append(dataframe)
 		#Renamed Ampl(JY) to avoide syntax errors
@@ -72,7 +67,7 @@ def load_data(antena_data_path):
 		#converted Ampl from str(because of E) to float 
 		dataframe['Amplitude']=dataframe[1:]['Amplitude'].astype(float)
 		#save sorted dataframe to cvs file wherever argv2 specifies
-		dataframe.to_csv(prefix0 + str(observation_periods) +'_sorted_antena_data.csv', sep=',')
+		dataframe.to_csv('Data/Analyzed_data/obv_period' + str(observation_periods) + 'data.csv', sep=',')
 		#converted Ampl from str(because of E) to float 
 		header_row += 523
 		#count each time list is ran through
@@ -81,7 +76,7 @@ def load_data(antena_data_path):
 	assert observation_periods == 24, 'Loop should run 24 times, for 12hrs of observation time, divided into 30minute observation periods'
 		
 	#checks how many times the while list ran and data chunks separated 
-	print(observation_periods)
+	print('Number of observation periods in data:', observation_periods)
 	return()
 	
 def make_phase_diagrams(table):
@@ -106,7 +101,7 @@ def make_phase_diagrams(table):
         #add y label
 		plt.ylabel('Phase')
         #add title for both plots since they're stacked
-		plt.title(prefix + str(count) + '_Phase Diagram')
+		plt.title('Phase_Diagram_for_Observation_period_'+ str(count))
         
         #4. bottom subplot is for amplitude data 
 		plt.subplot(2,1,2)
@@ -118,7 +113,7 @@ def make_phase_diagrams(table):
 		plt.xlabel('Frequency(MHz)')
         
         #5. save phase diagram separately using count variable 
-		plt.savefig(prefix + str(count) +'_Phase_Diagrams.pdf')
+		plt.savefig('Results/Plot_obv_period'+ str(count) +'.pdf')
 		plt.close()
 
 	assert count == 24, 'Loop should run 24 times, for 12hrs of observation time, divided into 30minute observation periods'
@@ -129,8 +124,6 @@ def signal_amplitude(data, column):
 	#define threshold value (here I just assigned one but should be done by stats or something)
 	threshold_ampl=0.010
     
-	#Create list to hold signal aplitudes
-	#signal_ampl_list = []
 	for values in column: 
 		if values >= threshold_ampl:
 			#put values into list
@@ -151,7 +144,7 @@ def signal_phase(table):
 	   
 	for chunk in table:
     
-		#STEP 4)
+		#1.)
 		#run function on all data to get signal amplitudes
 		signal_amplitude(chunk, chunk.Amplitude)
 		#assign signal amplitudes to list SA
@@ -159,12 +152,12 @@ def signal_phase(table):
 		sig_ampl=pd.DataFrame({'Amplitude':x})
 		SA.append(sig_ampl)
     
-		#STEP 5)
+		#2.)
 		#merge all data with signal amps data (from step above) to get rows for detection ampl only
 		signal_data= pd.merge(chunk, sig_ampl, on='Amplitude')
 		SD.append(signal_data)
     
-		#STEP 6)
+		#3.)
 		#Average phase values
 		Ave_phase=signal_data['Phase'].mean()
 		#send values to a list
@@ -177,12 +170,12 @@ def signal_phase(table):
 		ave_sig_phase['Phase_location']=ave_sig_phase/360
 
 		counts+=1
+	#test function
 	assert counts == 24, 'Loop should run 24 times, for 12hrs of observation time, divided into 30minute observation periods'
 	
-	ave_sig_phase.to_csv(prefix2 + '.csv', sep=',')
-    #STEP 8)
-	#return completed table of average signal phases defined as new variable
-	return(ave_sig_phase.head())
+	#save dataframe as projects final output
+	ave_sig_phase.to_csv('Results/Product_' + output_name + '.csv', sep=',')
+	return()
 
      
 main()
