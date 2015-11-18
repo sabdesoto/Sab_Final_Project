@@ -16,6 +16,7 @@ Both the ‘Data/antenna.dat’ and ‘of_project’ are arguments so they may b
 
 However the loading function of this project is specific to raw antena data for 24 observation periods, that are separated by headers. To run this program for data not formatted this way the load_data function in the python script itself would need to be changed (most importantly the length_of_file=12624). 
 Running the python script for the file types it was intended for (with the first command above)produces the following outcomes from each function:
+ 	
  	load_data(): the outcomes from this function are chunks of antenna data sorted by observation period saved in Data/Analyzed_data as . obv_period#_data.csv files
 
 	make_phase_diagrams(): the outcomes of this function are all the phase diagrams for each observation period saved in the Results directory as Plot_obv_period#.pdf files
