@@ -13,11 +13,6 @@ import sys
 #enter filename for antena_data for first function
 input_data_file = sys.argv[1]
 
-#prefix to save all separated antena_data files
-#data_chunk_name= sys.argv[2]
-#prefix for saving all phase diagrams
-#prefix= sys.argv[3]
-
 #output_name for saving average signal phase data for all observation periods
 output_name = sys.argv[2]
 
@@ -67,7 +62,7 @@ def load_data(input_data_file):
 		#converted Ampl from str(because of E) to float 
 		dataframe['Amplitude']=dataframe[1:]['Amplitude'].astype(float)
 		#save sorted dataframe to cvs file wherever argv2 specifies
-		dataframe.to_csv('Data/Analyzed_data/obv_period' + str(observation_periods) + 'data.csv', sep=',')
+		dataframe.to_csv('Data/Analyzed_data/obv_period' + str(observation_periods) + '_data.csv', sep=',')
 		#converted Ampl from str(because of E) to float 
 		header_row += 523
 		#count each time list is ran through
@@ -174,7 +169,7 @@ def signal_phase(table):
 	assert counts == 24, 'Loop should run 24 times, for 12hrs of observation time, divided into 30minute observation periods'
 	
 	#save dataframe as projects final output
-	ave_sig_phase.to_csv('Results/Product_' + output_name + '.csv', sep=',')
+	ave_sig_phase.to_csv('Results/' + output_name, sep=',')
 	return()
 
      
